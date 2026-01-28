@@ -20,13 +20,7 @@ router.get("/:slug", (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     try {
         const { slug } = req.params;
         const paste = yield index_1.default.Paste.findOne({
-            where: { slug },
-            attributes: [
-                "content",
-                "max_views",
-                "viewcount",
-                "expiresAt",
-            ],
+            where: { slug }
         });
         if (!paste) {
             return res.status(404).json({
