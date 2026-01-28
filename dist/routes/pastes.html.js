@@ -22,7 +22,6 @@ router.get("/:slug", (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         const paste = yield index_1.default.Paste.findOne({
             where: { slug },
             attributes: [
-                "id",
                 "content",
                 "max_views",
                 "viewcount",
@@ -30,19 +29,28 @@ router.get("/:slug", (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             ],
         });
         if (!paste) {
-            return res.status(404).render("404");
+            return res.status(404).json({
+                success: false,
+                reason: "NOT_FOUND",
+            });
         }
         const now = (0, pastes_routes_1.getNow)(req);
         if (paste.expiresAt && paste.expiresAt < now) {
-            return res.status(404).render("404");
+            return res.status(404).json({
+                success: false,
+                reason: "EXPIRED",
+            });
         }
-        if (paste.max_views !== null &&
-            paste.viewcount >= paste.max_views) {
-            return res.status(404).render("404");
+        if (paste.max_views !== null && paste.viewcount >= paste.max_views) {
+            return res.status(404).json({
+                success: false,
+                reason: "VIEW_LIMIT",
+            });
         }
         paste.viewcount += 1;
         yield paste.save();
-        return res.status(200).render("index", {
+        return res.status(200).json({
+            success: true,
             content: paste.content,
         });
     }

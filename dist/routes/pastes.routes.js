@@ -42,7 +42,7 @@ router.post("/pastes", (0, zodValidate_1.validate)(pastes_validation_1.createPas
         return res.status(201).json({
             "id": slug,
             ip,
-            "url": `http://13.233.140.171:8001/p/${slug}`
+            "url": `https://your-app.vercel.app/p/${slug}`
         });
         // return res.status(201).json({ message: "Paste created", slug });
     }
